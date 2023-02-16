@@ -155,6 +155,7 @@
     <ClCompile Include="lib\glad\src\glad.c" />
     <ClCompile Include="main.cc" />
     <ClCompile Include="shader.cc" />
+    <ClCompile Include="window.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="renderer.hh" />
