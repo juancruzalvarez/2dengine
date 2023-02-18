@@ -7,6 +7,8 @@
 #include <GLFW/glfw3.h>
 #include <glm.hpp>
 
+#include "input.hh"
+
 class Window {
 
 public:
@@ -16,24 +18,10 @@ public:
 		kNormal,
 	};
 
-	enum class Action {
-		kPressed,
-		kReleased,
-		kRepeat,
-	};
-
-	enum Modifiers {
-		kShift = 1,
-		kCtrl = 2,
-		kAlt = 4,
-		kSuper = 8,
-		kCapsLock = 16,
-		kNumLock = 32,
-	};
 
 	Window(std::string title, int width, int height, bool fullscreen = false);
-	void set_key_callback(std::function<void(int key, int scancode, Action action, int modifiers)>callback);
-	void set_char_callback(std::function<void(int utf32_character)> callback);
+	void set_key_callback(Input::KeyCallbackFn callback);
+	void set_char_callback(Input::CharCallbackFn callback);
 	void set_screen_mode(ScreenMode screen_mode);
 	void set_visible(bool visible);
 	glm::vec2 framebuffer_size();
@@ -49,8 +37,8 @@ private:
 	bool has_resized_;
 	glm::vec2 framebuffer_size_;
 	glm::vec2 window_size_;
-	std::function<void(int key, int scancode, Action action, int modifiers)>key_callback_;
-	std::function<void(int utf32_character)>char_callback_;
+	Input::KeyCallbackFn key_callback_;
+	Input::CharCallbackFn char_callback_;
 
 };
 

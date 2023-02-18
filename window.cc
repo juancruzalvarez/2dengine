@@ -43,16 +43,17 @@ Window::Window(std::string title, int width, int height, bool fullscreen) {
 	);
 }
 
-void Window::set_key_callback(std::function<void(int key, int scancode, Action action, int modifiers)>callback) {
+void Window::set_key_callback(Input::KeyCallbackFn callback) {
 	key_callback_ = callback;
 	glfwSetKeyCallback(
 		window_handle_,
 		[](GLFWwindow* window, int key, int scancode, int action, int modifiers) {
-			Action a;
+			Input::Action a;
 			switch (action) {
-			case GLFW_PRESS: a = Action::kPressed; break;
-			case GLFW_RELEASE: a = Action::kReleased; break;
-			case GLFW_REPEAT: a = Action::kRepeat; break;
+			case GLFW_PRESS: a = Input::Action::kPressed; break;
+			case GLFW_RELEASE: a = Input::Action::kReleased; break;
+			case GLFW_REPEAT: a = Input::Action::kRepeat; break;
+			default: return;
 			}
 			Window* usr_ptr = ((Window*)glfwGetWindowUserPointer(window));
 			usr_ptr->key_callback_(key, scancode, a, modifiers);
@@ -60,11 +61,11 @@ void Window::set_key_callback(std::function<void(int key, int scancode, Action a
 	);
 }
 
-void Window::set_char_callback(std::function<void(int utf32_character)> callback) {
+void Window::set_char_callback(Input::CharCallbackFn callback) {
 	char_callback_ = callback;
 	glfwSetCharCallback(
 		window_handle_,
-		[](GLFWwindow* window, int character) {
+		[](GLFWwindow* window, uint32_t character) {
 			Window* usr_ptr = ((Window*)glfwGetWindowUserPointer(window));
 			usr_ptr->char_callback_(character);
 		}

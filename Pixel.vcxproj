@@ -160,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hh" />
+    <ClInclude Include="input.hh" />
     <ClInclude Include="renderer.hh" />
     <ClInclude Include="shader.hh" />
     <ClInclude Include="window.hh" />
