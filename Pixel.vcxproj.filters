@@ -27,6 +27,9 @@
     <ClCompile Include="window.cc">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="app.cc">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader.hh">
@@ -36,6 +39,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="window.hh">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="app.hh">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

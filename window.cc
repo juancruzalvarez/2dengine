@@ -43,6 +43,36 @@ Window::Window(std::string title, int width, int height, bool fullscreen) {
 	);
 }
 
+void Window::set_key_callback(std::function<void(int key, int scancode, Action action, int modifiers)>callback) {
+	key_callback_ = callback;
+	glfwSetKeyCallback(
+		window_handle_,
+		[](GLFWwindow* window, int key, int scancode, int action, int modifiers) {
+			Action a;
+			switch (action) {
+			case GLFW_PRESS: a = Action::kPressed; break;
+			case GLFW_RELEASE: a = Action::kReleased; break;
+			case GLFW_REPEAT: a = Action::kRepeat; break;
+			}
+			Window* usr_ptr = ((Window*)glfwGetWindowUserPointer(window));
+			usr_ptr->key_callback_(key, scancode, a, modifiers);
+		}
+	);
+}
+
+void Window::set_char_callback(std::function<void(int utf32_character)> callback) {
+	char_callback_ = callback;
+	glfwSetCharCallback(
+		window_handle_,
+		[](GLFWwindow* window, int character) {
+			Window* usr_ptr = ((Window*)glfwGetWindowUserPointer(window));
+			usr_ptr->char_callback_(character);
+		}
+	);
+}
+
+
+
 void Window::make_context_current() {
 	glfwMakeContextCurrent(window_handle_);
 }
