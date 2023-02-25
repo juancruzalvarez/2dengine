@@ -21,7 +21,6 @@ namespace Input {
 	typedef std::function<void(int glfw_key_code, int scancode, Action action, int modifiers)> KeyCallbackFn;
 	typedef std::function<void(uint32_t utf32_character)> CharCallbackFn;
 	typedef std::function<void(glm::vec2 pos)> MouseMoveCallbackFn;
-	typedef std::function<void()
 }
 
 #endif

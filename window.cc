@@ -5,6 +5,9 @@
 
 #include <GLFW/glfw3.h>
 Window::Window(std::string title, int width, int height, bool fullscreen) {
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	window_handle_ = glfwCreateWindow(
 		width,
 		height,
@@ -41,6 +44,7 @@ Window::Window(std::string title, int width, int height, bool fullscreen) {
 			std::cout << "maximized";
 		}
 	);
+
 }
 
 void Window::set_key_callback(Input::KeyCallbackFn callback) {
