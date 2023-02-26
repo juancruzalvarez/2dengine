@@ -26,11 +26,11 @@ App::App() {
 	uint8_t* bitmap_img;
 	std::map<uint8_t, graphics::CharInfo> charmap;
 	glm::ivec2 bitmap_img_size;
-	graphics::LoadFont("res/fonts/arialbd.ttf", 32, &bitmap_img, &bitmap_img_size , &charmap);
+	graphics::LoadFont("res/fonts/CascadiaCode.ttf", 32, &bitmap_img, &bitmap_img_size , &charmap);
 	std::cout << "charmap_size:" << charmap.size() << "\n";
 	std::cout << "A:" << charmap['a'].size.x << " " << charmap['a'].size.y << "\n";
 	glfwInit();
-	window_ = new Window{"hello", 300, 300};
+	window_ = new Window{"hello", 800, 800};
 	window_->set_key_callback( [&](int glfw_key_code, int scancode, Input::Action action, int modifiers) {
 		key_callback(glfw_key_code, scancode, action, modifiers);
 	});
@@ -45,7 +45,7 @@ App::App() {
 	renderer_ = new graphics::Renderer();
 	int width, height, nrChannels;
 	stbi_set_flip_vertically_on_load(true); 
-	unsigned char* data = stbi_load("res/sprites/test.png", &width, &height, &nrChannels, 4);
+	uint8_t* data = stbi_load("res/sprites/test.png", &width, &height, &nrChannels, 4);
 	if (!data)
 	{
 		std::cout << "Failed to load texture" << std::endl;
@@ -55,14 +55,14 @@ App::App() {
 		GL_RGBA8,
 		GL_LINEAR,
 		GL_REPEAT,
-		width, height
+		bitmap_img_size.x, bitmap_img_size.y
 	};
 
 	 t = graphics::Texture(
 		info,
-		GL_RGBA,
+		GL_RED,
 		GL_UNSIGNED_BYTE,
-		(void*)data
+		(void*)bitmap_img
 	);
 }
 void App::Run() {
@@ -71,8 +71,8 @@ void App::Run() {
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		std::vector<float> vec = { 1, 1, 1, 0, 0,0, 0, 1 };
-		renderer_->Render(graphics::Quad{ {0.0,0.0},{0.8,0.8},vec }, t.texture_id);
-		renderer_->Render(graphics::Quad{ {0.3,0.5},{0.4,0.6},vec }, t.texture_id);
+		renderer_->Render(graphics::Quad{ {0.0,0.0},{2,2},vec }, t.texture_id);
+		//renderer_->Render(graphics::Quad{ {0.3,0.5},{0.4,0.6},vec }, t.texture_id);
 
 		renderer_->Flush();
 		if (window_->has_resized())
