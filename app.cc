@@ -23,7 +23,12 @@ MessageCallback(GLenum source,
 
 
 App::App() { 
-	graphics::LoadFont("res/fonts/arialbd.ttf", 32, nullptr, nullptr, nullptr);
+	uint8_t* bitmap_img;
+	std::map<uint8_t, graphics::CharInfo> charmap;
+	glm::ivec2 bitmap_img_size;
+	graphics::LoadFont("res/fonts/arialbd.ttf", 32, &bitmap_img, &bitmap_img_size , &charmap);
+	std::cout << "charmap_size:" << charmap.size() << "\n";
+	std::cout << "A:" << charmap['a'].size.x << " " << charmap['a'].size.y << "\n";
 	glfwInit();
 	window_ = new Window{"hello", 300, 300};
 	window_->set_key_callback( [&](int glfw_key_code, int scancode, Input::Action action, int modifiers) {
