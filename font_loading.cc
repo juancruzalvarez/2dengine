@@ -31,6 +31,7 @@ void LoadFont(
 		std::cout << "There was an error setting the font size.\n";
 		return;
 	}
+
 	int tex_size = pixel_height * 16;
 	
 	(*bitmap_img) = new uint8_t[tex_size * tex_size];
@@ -45,11 +46,11 @@ void LoadFont(
 			charmap->insert({
 				current_char,
 				{
-					{x, y}, 
+					{x, y+1}, 
 					{x+face->glyph->bitmap.width, y+face->glyph->bitmap.rows},
 					{face->glyph->bitmap.width, face->glyph->bitmap.rows},
-					{face->glyph->metrics.horiBearingX, face->glyph->metrics.horiBearingY},
-					face->glyph->metrics.horiAdvance,
+					{face->glyph->bitmap_left, face->glyph->bitmap_top},
+					face->glyph->advance.x>>6,
 
 				}
 			});

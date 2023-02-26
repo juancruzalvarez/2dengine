@@ -1,7 +1,7 @@
 #ifndef RENDERER_H_
 #define RENDERER_H_
 
-#include <vector>
+#include <array>
 
 #include <glm.hpp>
 
@@ -12,7 +12,7 @@ namespace graphics {
 	struct Quad {
 		glm::vec2 pos;
 		glm::vec2 size;
-		std::vector<float> uvs;
+		std::array<float, 8> uvs;
 	};
 
 	class Renderer {

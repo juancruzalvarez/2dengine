@@ -42,6 +42,9 @@
     <ClCompile Include="font_loading.cc">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="util.cc">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="shader.hh">
@@ -66,6 +69,9 @@
       <Filter>Archivos de origen</Filter>
     </ClInclude>
     <ClInclude Include="font_loading.hh">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="util.hh">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

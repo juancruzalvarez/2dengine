@@ -159,6 +159,7 @@
     <ClCompile Include="renderer.cc" />
     <ClCompile Include="shader.cc" />
     <ClCompile Include="texture.cc" />
+    <ClCompile Include="util.cc" />
     <ClCompile Include="window.cc" />
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +170,7 @@
     <ClInclude Include="shader.hh" />
     <ClInclude Include="stb_img.h" />
     <ClInclude Include="texture.hh" />
+    <ClInclude Include="util.hh" />
     <ClInclude Include="window.hh" />
   </ItemGroup>
   <ItemGroup>
