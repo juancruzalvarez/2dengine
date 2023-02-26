@@ -31,8 +31,9 @@ void LoadFont(
 		std::cout << "There was an error setting the font size.\n";
 		return;
 	}
+	int tex_size = pixel_height * 16;
 	std::map<uint8_t, CharInfo> charmap;
-
+	uint8_t* tex_buffer = new uint8_t[tex_size*tex_size];
 	int x = 0, y = 0;
 	int current_max_height = 0;
 	int current_max_width = 0;
@@ -53,8 +54,32 @@ void LoadFont(
 				}
 			});
 			x += face->glyph->bitmap.width;
-			if (y + face->glyph->bitmap.rows > current_max_height) {
-				current_max_height = y + face->glyph->bitmap.rows;
+			if (face->glyph->bitmap.rows > current_max_height) {
+				current_max_height = face->glyph->bitmap.rows;
+			}
+			if (face->glyph->bitmap.pitch > 0) { 
+				// bitmap buffer stores pixels in decreasing vertical position. First bytes in the buffer correspond to
+				// the topmost pixels in the bitmap.
+				for (int i = 0; i < charmap[current_char].size.y; i++) {
+					glm::ivec2 tex_pos = glm::ivec2(x, y + (charmap[current_char].size.y - i));
+					memcpy(
+						&(tex_buffer[tex_pos.y * tex_size + tex_size]),
+						&(face->glyph->bitmap.buffer[i* face->glyph->bitmap.pitch]),
+						charmap[current_char].size.x
+					);
+				}
+			}
+			else {
+				// bitmap buffer stores pixels in increasing vertical position. First bytes in the buffer correspond to
+				// the bottom pixels in the bitmap.
+				for (int i = 0; i < charmap[current_char].size.y; i++) {
+					glm::ivec2 tex_pos = glm::ivec2(x, y + i);
+					memcpy(
+						&(tex_buffer[tex_pos.y * tex_size + tex_size]),
+						&(face->glyph->bitmap.buffer[i * face->glyph->bitmap.pitch]),
+						charmap[current_char].size.x
+					);
+				}
 			}
 			
 		}
@@ -63,8 +88,8 @@ void LoadFont(
 			current_max_width = x;
 		x = 0;
 	}
-
-	std::cout << "After:" << current_max_width << " " << current_max_height << "\n";
+	std::cout << "PixelSize:" << 16 * pixel_height << "\n";
+	std::cout << "After:" << current_max_width << " " << y << "\n";
 
 }
 

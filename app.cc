@@ -23,7 +23,7 @@ MessageCallback(GLenum source,
 
 
 App::App() { 
-	graphics::LoadFont("res/fonts/arial.ttf", 16, nullptr, nullptr, nullptr);
+	graphics::LoadFont("res/fonts/arialbd.ttf", 32, nullptr, nullptr, nullptr);
 	glfwInit();
 	window_ = new Window{"hello", 300, 300};
 	window_->set_key_callback( [&](int glfw_key_code, int scancode, Input::Action action, int modifiers) {
