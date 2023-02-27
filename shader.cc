@@ -76,7 +76,6 @@ void Shader::set_v4f(std::string name, glm::vec4 value)
 }
 void Shader::set_m4x4f(std::string name, glm::mat4 value)
 {
-	std::cout << "loc:" << glGetUniformLocation(program_id_, "transform") << "\n";
 	glUniformMatrix4fv(glGetUniformLocation(program_id_, name.c_str()), 1, GL_FALSE, &value[0][0]);
 }
 

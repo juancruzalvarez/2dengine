@@ -3,6 +3,8 @@
 #include "glad/glad.h"
 #include <iostream>
 
+#include <gtc/matrix_transform.hpp>
+
 namespace graphics {
 
         
@@ -94,5 +96,11 @@ void Renderer::Flush() {
     
     current_quad_ = 0;
 }
+
+void Renderer::SetOrtho(glm::ivec2 size) {
+    auto mat = glm::ortho(0, size.x, 0, size.y);
+    shader_.set_m4x4f("ortho", mat);
+}
+
 
 }

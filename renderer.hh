@@ -21,6 +21,7 @@ namespace graphics {
 		~Renderer();
 		void Render(Quad quad, uint32_t texture_id);
 		void Flush();
+		void SetOrtho(glm::ivec2 size);
 	private:
 		static const float kQuadVertices[6*3];
 		static const int kQuadIndices[6];

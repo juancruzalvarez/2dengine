@@ -43,7 +43,7 @@ App::App() {
 	});
 	
 	renderer_ = new graphics::Renderer();
-
+	renderer_->SetOrtho({400,400});
 	uint8_t* bitmap_img;
 	glm::ivec2 bitmap_img_size;
 	graphics::LoadFont("res/fonts/CascadiaCode.ttf", 48, &bitmap_img, &bitmap_img_size, &charmap_);
@@ -75,7 +75,7 @@ void App::Run() {
 		renderer_->Render(
 			graphics::Quad {
 				{0.0,0.0},
-				{2,2},
+				{100,100},
 				util::pixel_corners_to_uv_array(
 					charmap_['a'].bot_left_corner,
 					charmap_['a'].top_right_corner,
