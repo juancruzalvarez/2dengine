@@ -30,7 +30,7 @@ FileUtilErr GetContent(const std::string& path, std::vector<std::string>& conten
 FileUtilErr SaveFile(const std::string& path, const std::vector<std::string>& content);
 
 // Returns the file at the given path, if the file is a directory it will recursibly call itself to find all children.
-FileUtilErr GetFileTree(const std::string& path, File& file);
+File GetFileTree(const std::string& path);
 
 void ChangeTabsToSpaces(std::vector<std::string>& content, int spaces_in_tab);
 

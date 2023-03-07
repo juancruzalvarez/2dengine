@@ -40,6 +40,7 @@ struct Entry {
 std::vector<Entry> m_entries;
 std::string m_root_path;
 glm::vec2 m_size;
+int m_first_line;
 int m_entries_size;
 int m_text_size;
 int m_pos;

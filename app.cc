@@ -29,7 +29,7 @@ App::App() {
 
 	glfwInit();
 
-	window_ = new Window{ "hello", 1250, 800 };
+	window_ = new Window{ "hello", 900, 700 };
 	window_->make_context_current();
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -44,12 +44,12 @@ App::App() {
 
 
 	renderer_ = new graphics::Renderer();
-	renderer_->SetOrtho({ 1250,800 });
+	renderer_->SetOrtho({ 900,700 });
 	renderer_->LoadFont("res/fonts/lucon.ttf", 84);
 	m_text_editor = new TextEditor();
 	m_text_editor->SetLineHeight(20);
 	m_text_editor->SetTitle("app.cc");
-	m_text_editor->SetSize({ 1000,700 });
+	m_text_editor->SetSize({ 800,700 });
 	std::vector<std::string> content;
 	if (file_utils::GetContent("app.cc", content) == file_utils::FileUtilErr::NO_ERR) {
 		file_utils::ChangeTabsToSpaces(content, 3);
@@ -62,7 +62,7 @@ App::App() {
 		});
 	m_file_tree = new FileTree();
 	m_file_tree->SetRootFolder("./src/");
-	m_file_tree->SetSize({400,800});
+	m_file_tree->SetSize({200,700});
 	m_file_tree->SetTextSize(16);
 /*
 	window_->set_key_callback([&](int glfw_key_code, int scancode, Input::Action action, int modifiers) {
@@ -140,7 +140,7 @@ void App::Run() {
 		glClearColor(0.f, 0.f, 0.f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	
-		//m_text_editor->Render(renderer_, {50,50});
+		m_text_editor->Render(renderer_, {200,0});
 		m_file_tree->Render(renderer_, { 0,0 });
 
 		renderer_->Flush();

@@ -47,23 +47,20 @@ FileUtilErr SaveFile(const std::string& path, const std::vector<std::string>& co
 	return FileUtilErr::NO_ERR;
 }
 
-FileUtilErr GetFileTree(const std::string& path, File& file) {
+File GetFileTree(const std::string& path) {
+	File file;
 	file.name = std::filesystem::path(path).filename().string();
 	file.is_directory = std::filesystem::is_directory(path);
-	File c;
 	int cc = 0;
 	if (file.is_directory) {
 		for (const auto& child : std::filesystem::directory_iterator(path)) {
 			cc++;
 			auto child_name = std::filesystem::path(child.path().string()).filename().string();
 			if (child_name[0] == '.') continue;
-			GetFileTree(child.path().string(), c);
-			file.children.push_back(c);
+			file.children.push_back(GetFileTree(child.path().string()));
 		}
 	}
-	//std::cout << file.name << "\n";
-	//std::cout << "childs:" << cc<<"\n";
-	return FileUtilErr::NO_ERR;
+	return file;
 }
 
 void ChangeTabsToSpaces(std::vector<std::string>& content, int spaces_in_tab) {

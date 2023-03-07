@@ -5,29 +5,16 @@
 FileTree::FileTree() {
 	m_entries = {};
 	m_entries_size = 0;
+	m_first_line = 0;
 }
 
 // Sets the root folder 
 void FileTree::SetRootFolder(const std::string& path) {
 	m_root_path = path;
-	file_utils::File f;
-	file_utils::GetFileTree(path, f);
-	std::function<void(file_utils::File f)> fu = [&](file_utils::File f) {
-		std::cout << f.name <<"\n";
-		if (f.is_directory)
-			for (auto c : f.children)
-				fu(c);
-		
-	};
-	fu(f);
-	exit(0);
+	file_utils::File f = file_utils::GetFileTree(path);
 	generate_entries(f, path, -1);
-
 	m_entries.erase(m_entries.begin());
 	calculate_entries_size();
-	std::cout << "Before:\n";
-	for (int i = 0; i < m_entries.size(); i++)
-		std::cout << i << ": " << m_entries[i].name << "\n";
 }
 
 // Open folder, or open file.
@@ -46,23 +33,35 @@ void FileTree::Enter(std::string& path) {
 
 // Move the current selected folder, direction
 void FileTree::Move(const int& direction) {
-	m_pos = std::min(m_entries_size, std::max(m_pos + direction, 0));
+	m_pos = std::min(m_entries_size-1, std::max(m_pos + direction, 0));
+	if (m_pos < m_first_line)
+		m_first_line = std::max(0, m_first_line-1);
+	int lines_rendered = m_size.y / m_text_size - 1;
+	if(m_pos >= m_first_line + lines_rendered)
+		m_first_line = std::min(m_entries_size, m_first_line + 1);
+
 }
+
 
 // Render the FileTree at the position especified by @pos
 void FileTree::Render(graphics::Renderer* renderer, const glm::vec2& pos) {
+	renderer->RenderWhiteQuad({ pos, {0.3 * m_text_size,m_size.y}, {},{1,1,1,1} });
+	renderer->RenderWhiteQuad({ pos+glm::vec2{m_size.x, 0.f}, {0.3 * m_text_size,m_size.y}, {},{1,1,1,1}});
+	renderer->RenderWhiteQuad({ pos , {m_size.x,0.3 * m_text_size}, {},{1,1,1,1} });
+	renderer->RenderWhiteQuad({ pos + glm::vec2{0.f, m_size.y}, {m_size.x,0.3 * m_text_size}, {},{1,1,1,1} });
+
+
+
 	int base_line_x = pos.x + 4;
 	int indent_size = 2*renderer->GetTextSize(" ", m_text_size).x;
 	int y = pos.y + m_size.y-m_text_size;
-	int i = 0;
-	std::cout << "Before:\n";
-	for (int i = 0; i < m_entries.size(); i++)
-		std::cout << i << ": " << m_entries[i].name<<"\n";
-	std::cout << "-----------------------------------------------";
+	int i = get_absolute_entry_pos(m_first_line);
+	int cursor_absolute_pos = get_absolute_entry_pos(m_pos);
 	while (i < m_entries.size()) {
+		if (i == cursor_absolute_pos) {
+			renderer->RenderWhiteQuad({ {pos.x, y},{m_size.x, m_text_size },{},{1,1,1,0.5} });
+		}
 		auto current = m_entries[i];
-		std::cout << "i: " << i << "\n";
-		std::cout << "current: " << current.name << "\n";
 		renderer->RenderText(current.name, {pos.x + base_line_x+current.indentation*indent_size, y },m_text_size, {1,1,1,1});
 		y -= m_text_size;
 		i++;
@@ -71,7 +70,6 @@ void FileTree::Render(graphics::Renderer* renderer, const glm::vec2& pos) {
 				i++;
 		}
 	}
-	std::cout << "-----------------------------------------------";
 
 }
 
