@@ -39,10 +39,16 @@
     <ClCompile Include="texture.cc">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="font_loading.cc">
+    <ClCompile Include="util.cc">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
-    <ClCompile Include="util.cc">
+    <ClCompile Include="text_editor.cc">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="file_utils.cc">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
+    <ClCompile Include="file_tree.cc">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,10 +74,16 @@
     <ClInclude Include="stb_img.h">
       <Filter>Archivos de origen</Filter>
     </ClInclude>
-    <ClInclude Include="font_loading.hh">
+    <ClInclude Include="util.hh">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="util.hh">
+    <ClInclude Include="text_editor.hh">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="file_utils.hh">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="file_tree.hh">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

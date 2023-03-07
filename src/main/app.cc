@@ -61,10 +61,10 @@ App::App() {
 		m_text_editor->Write(c);
 		});
 	m_file_tree = new FileTree();
-	m_file_tree->SetRootFolder("./src/");
+	m_file_tree->SetRootFolder("./");
 	m_file_tree->SetSize({400,800});
 	m_file_tree->SetTextSize(16);
-/*
+
 	window_->set_key_callback([&](int glfw_key_code, int scancode, Input::Action action, int modifiers) {
 		if (action == Input::Action::kPressed || action == Input::Action::kRepeat) {
 			switch (glfw_key_code) {
@@ -105,34 +105,6 @@ App::App() {
 		}
 		
 	});
-	*/
-	window_->set_key_callback([&](int glfw_key_code, int scancode, Input::Action action, int modifiers) {
-		if (action == Input::Action::kPressed || action == Input::Action::kRepeat) {
-			switch (glfw_key_code) {
-			case GLFW_KEY_DELETE: {
-				//m_text_editor->Supr();
-				break;
-			}
-			case GLFW_KEY_ENTER: {
-				std::string path;
-				m_file_tree->Enter(path);
-				std::cout << "Path:" << path << "\n";
-				break;
-			}
-			case GLFW_KEY_UP: {
-				m_file_tree->Move(-1);
-				break;
-			}
-			case GLFW_KEY_DOWN: {
-				m_file_tree->Move(1);
-				break;
-			}
-
-			}
-		}
-
-		});
-
 }
 void App::Run() {
 	while (!window_->should_close())

@@ -89,6 +89,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)lib\glfw-3.3.7.bin.WIN64\glfw-3.3.7.bin.WIN64\include;$(ProjectDir)lib\glad\include;$(ProjectDir)lib\glm-master\glm-master\glm;$(ProjectDir)lib\stb-master;$(ProjectDir)lib\freetype\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -106,6 +107,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)lib\glfw-3.3.7.bin.WIN64\glfw-3.3.7.bin.WIN64\include;$(ProjectDir)lib\glad\include;$(ProjectDir)lib\glm-master\glm-master\glm;$(ProjectDir)lib\stb-master;$(ProjectDir)lib\freetype\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -123,6 +125,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)lib\glfw-3.3.7.bin.WIN64\glfw-3.3.7.bin.WIN64\include;$(ProjectDir)lib\glad\include;$(ProjectDir)lib\glm-master\glm-master\glm;$(ProjectDir)lib\stb-master;$(ProjectDir)lib\freetype\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,23 +156,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="app.cc" />
-    <ClCompile Include="font_loading.cc" />
+    <ClCompile Include="file_tree.cc" />
+    <ClCompile Include="file_utils.cc" />
     <ClCompile Include="lib\glad\src\glad.c" />
     <ClCompile Include="main.cc" />
     <ClCompile Include="renderer.cc" />
     <ClCompile Include="shader.cc" />
     <ClCompile Include="texture.cc" />
+    <ClCompile Include="text_editor.cc" />
     <ClCompile Include="util.cc" />
     <ClCompile Include="window.cc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="app.hh" />
-    <ClInclude Include="font_loading.hh" />
+    <ClInclude Include="file_tree.hh" />
+    <ClInclude Include="file_utils.hh" />
     <ClInclude Include="input.hh" />
     <ClInclude Include="renderer.hh" />
     <ClInclude Include="shader.hh" />
     <ClInclude Include="stb_img.h" />
     <ClInclude Include="texture.hh" />
+    <ClInclude Include="text_editor.hh" />
     <ClInclude Include="util.hh" />
     <ClInclude Include="window.hh" />
   </ItemGroup>

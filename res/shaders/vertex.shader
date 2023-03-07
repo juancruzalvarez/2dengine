@@ -4,18 +4,19 @@ layout (location = 0) in vec2 in_pos;
 layout (location = 1) in vec4 transform;
 layout (location = 2) in vec4 uvs1;
 layout (location = 3) in vec4 uvs2;
+layout (location = 4) in vec4 color;
 
-uniform mat4 ortho;
+
+uniform vec2 ortho_size;
 
 out vec2 uv_coords; 
+out vec4 p_color;
 
 void main()
 {
-    gl_Position = ortho * vec4(in_pos * transform.zw + transform.xy, 0.0, 1.0);
-    switch (gl_VertexID) {
-    case 0: uv_coords = uvs1.xy; break;
-    case 1: uv_coords = uvs1.zw; break;
-    case 2: uv_coords = uvs2.xy; break;
-    case 3: uv_coords = uvs2.zw; break;
-    }
+    vec2 pos = ((in_pos * transform.zw + transform.xy) / ortho_size)*2 - 1;
+    gl_Position = vec4(pos, 0.0, 1.0);
+    vec2 uvs[4] = { uvs1.xy, uvs1.zw, uvs2.xy, uvs2.zw };
+    uv_coords = uvs[gl_VertexID];
+    p_color = color;
 }
