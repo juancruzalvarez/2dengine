@@ -5,6 +5,8 @@
 
 #include <GLFW/glfw3.h>
 Window::Window(std::string title, int width, int height, bool fullscreen) {
+	framebuffer_size_ = { width, height };
+	window_size_ = { width, height };
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -16,7 +18,6 @@ Window::Window(std::string title, int width, int height, bool fullscreen) {
 		nullptr
 	);
 	glfwSetWindowUserPointer(window_handle_, this);
-
 	glfwSetFramebufferSizeCallback(
 		window_handle_,
 		[](GLFWwindow *window, int width, int height){

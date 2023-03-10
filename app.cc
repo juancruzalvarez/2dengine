@@ -29,8 +29,8 @@ App::App() {
 
 	glfwInit();
 
-	window_ = new Window{ "hello", 900, 700 };
-	window_->make_context_current();
+	m_window = new Window{ "hello", 900, 700 };
+	m_window->make_context_current();
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -43,27 +43,10 @@ App::App() {
 
 
 
-	renderer_ = new graphics::Renderer();
-	renderer_->SetOrtho({ 900,700 });
-	renderer_->LoadFont("res/fonts/lucon.ttf", 84);
-	m_text_editor = new TextEditor();
-	m_text_editor->SetLineHeight(20);
-	m_text_editor->SetTitle("app.cc");
-	m_text_editor->SetSize({ 800,700 });
-	std::vector<std::string> content;
-	if (file_utils::GetContent("app.cc", content) == file_utils::FileUtilErr::NO_ERR) {
-		file_utils::ChangeTabsToSpaces(content, 3);
-		m_text_editor->SetContent(content);
-	}
-	else
-		m_text_editor->SetContent({ "" });
-	window_->set_char_callback([&](uint8_t c) {
-		m_text_editor->Write(c);
-		});
-	m_file_tree = new FileTree();
-	m_file_tree->SetRootFolder("./src/");
-	m_file_tree->SetSize({200,700});
-	m_file_tree->SetTextSize(16);
+	m_renderer = new graphics::Renderer();
+	m_renderer->SetOrtho({ 900,700 });
+	m_renderer->LoadFont("res/fonts/lucon.ttf", 84);
+	
 /*
 	window_->set_key_callback([&](int glfw_key_code, int scancode, Input::Action action, int modifiers) {
 		if (action == Input::Action::kPressed || action == Input::Action::kRepeat) {
@@ -106,7 +89,7 @@ App::App() {
 		
 	});
 	*/
-	window_->set_key_callback([&](int glfw_key_code, int scancode, Input::Action action, int modifiers) {
+	m_window->set_key_callback([&](int glfw_key_code, int scancode, Input::Action action, int modifiers) {
 		if (action == Input::Action::kPressed || action == Input::Action::kRepeat) {
 			switch (glfw_key_code) {
 			case GLFW_KEY_DELETE: {
@@ -132,26 +115,66 @@ App::App() {
 		}
 
 		});
-
+	init_layout();
 }
+
 void App::Run() {
-	while (!window_->should_close())
+	while (!m_window->should_close())
 	{
 		glClearColor(0.f, 0.f, 0.f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 	
-		m_text_editor->Render(renderer_, {200,0});
-		m_file_tree->Render(renderer_, { 0,0 });
-
-		renderer_->Flush();
-		if (window_->has_resized())
-			std::cout << "\nRESIZED!!!!" << "\n";
-		window_->update();
+		m_file_tree->Render(m_renderer);
+		for (const auto& col : m_text_editors)
+			for (const auto& text_editor : col)
+				text_editor->Render(m_renderer);
+		m_renderer->Flush();
+		if (m_window->has_resized())
+			handle_window_resize();
+		m_window->update();
 	}
 }
 
 
 void App::key_callback(int glfw_key_code, int scancode, Input::Action action, int modifiers){
+}
+
+void App::init_layout() {
+	m_last_window_framebuffer_size = m_window->framebuffer_size();
+	m_file_tree = new FileTree();
+	m_file_tree->SetRootFolder("./src/");
+	m_file_tree->SetSize({ kDefaultFileTreeWidth,m_last_window_framebuffer_size.y});
+	m_file_tree->SetPosition({ 0,0 });
+	m_file_tree->SetTextSize(16);
+	m_text_editors = { {new TextEditor()}};
+	m_current_text_editor_index = { 0,0 };
+	get_current_editor()->SetPosition({kDefaultFileTreeWidth, 0});
+	get_current_editor()->SetSize({ m_last_window_framebuffer_size.x - kDefaultFileTreeWidth, m_last_window_framebuffer_size.y});
+	
+}
+
+TextEditor* App::get_current_editor() {
+	return m_text_editors[m_current_text_editor_index.x][m_current_text_editor_index.y];
+}
+
+void App::handle_window_resize() {
+	glm::vec2 new_size = m_window->framebuffer_size();
+	glViewport(0, 0, new_size.x, new_size.y);
+	m_renderer->SetOrtho(new_size);
+	glm::vec2 scale_factor = new_size / m_last_window_framebuffer_size;
+
+	m_file_tree->SetSize(m_file_tree->Size()*scale_factor);
+	float current_x = m_file_tree->Size().x;
+	for (const auto& col : m_text_editors) {
+		float current_y = 0;
+		for (const auto& text_editor : col) {
+			text_editor->SetSize(text_editor->Size()*scale_factor);
+			text_editor->SetPosition({ current_x, current_y });
+			current_y += text_editor->Size().y;
+		}
+		current_x += col[0]->Size().x;
+	}
+
 }
 
 App::~App() {

@@ -44,25 +44,25 @@ void FileTree::Move(const int& direction) {
 
 
 // Render the FileTree at the position especified by @pos
-void FileTree::Render(graphics::Renderer* renderer, const glm::vec2& pos) {
-	renderer->RenderWhiteQuad({ pos, {0.3 * m_text_size,m_size.y}, {},{1,1,1,1} });
-	renderer->RenderWhiteQuad({ pos+glm::vec2{m_size.x, 0.f}, {0.3 * m_text_size,m_size.y}, {},{1,1,1,1}});
-	renderer->RenderWhiteQuad({ pos , {m_size.x,0.3 * m_text_size}, {},{1,1,1,1} });
-	renderer->RenderWhiteQuad({ pos + glm::vec2{0.f, m_size.y}, {m_size.x,0.3 * m_text_size}, {},{1,1,1,1} });
+void FileTree::Render(graphics::Renderer* renderer) {
+	renderer->RenderWhiteQuad({ m_position, {0.3 * m_text_size,m_size.y}, {},{1,1,1,1} });
+	renderer->RenderWhiteQuad({ m_position +glm::vec2{m_size.x, 0.f}, {0.3 * m_text_size,m_size.y}, {},{1,1,1,1}});
+	renderer->RenderWhiteQuad({ m_position , {m_size.x,0.3 * m_text_size}, {},{1,1,1,1} });
+	renderer->RenderWhiteQuad({ m_position + glm::vec2{0.f, m_size.y}, {m_size.x,0.3 * m_text_size}, {},{1,1,1,1} });
 
 
 
-	int base_line_x = pos.x + 4;
+	int base_line_x = m_position.x + 4;
 	int indent_size = 2*renderer->GetTextSize(" ", m_text_size).x;
-	int y = pos.y + m_size.y-m_text_size;
+	int y = m_position.y + m_size.y-m_text_size;
 	int i = get_absolute_entry_pos(m_first_line);
 	int cursor_absolute_pos = get_absolute_entry_pos(m_pos);
 	while (i < m_entries.size()) {
 		if (i == cursor_absolute_pos) {
-			renderer->RenderWhiteQuad({ {pos.x, y},{m_size.x, m_text_size },{},{1,1,1,0.5} });
+			renderer->RenderWhiteQuad({ {m_position.x, y},{m_size.x, m_text_size },{},{1,1,1,0.5} });
 		}
 		auto current = m_entries[i];
-		renderer->RenderText(current.name, {pos.x + base_line_x+current.indentation*indent_size, y },m_text_size, {1,1,1,1});
+		renderer->RenderText(current.name, { m_position.x + base_line_x+current.indentation*indent_size, y },m_text_size, {1,1,1,1});
 		y -= m_text_size;
 		i++;
 		if (current.is_directory && !current.open) {
@@ -73,8 +73,20 @@ void FileTree::Render(graphics::Renderer* renderer, const glm::vec2& pos) {
 
 }
 
+void FileTree::SetPosition(const glm::vec2& position) {
+	m_position = position;
+}
+
 void FileTree::SetSize(const glm::vec2& size) {
 	m_size = size;
+}
+
+glm::vec2 FileTree::Position() {
+	return m_position;
+}
+
+glm::vec2 FileTree::Size() {
+	return m_size;
 }
 
 void FileTree::SetTextSize(const int& size) {
