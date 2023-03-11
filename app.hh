@@ -24,21 +24,33 @@ private:
 		kConsole,
 	};
 
+	enum class Mode {
+		kText,
+		kEditor,
+	};
+
 	static const int kDefaultFileTreeWidth = 300;
 
-	void set_view(View view);
 	void init_layout();
 	void handle_window_resize();
 	TextEditor* get_current_editor();
+	void add_editor_col();
+	void add_editor_in_current_col();
+	void key_callback(int glfw_key_code, int scancode, input::Action action, int modifiers);
+	void text_editor_key_callback(int glfw_key_code, int scancode, input::Action action, int modifiers);
+	void text_editor_char_callback(uint32_t utf32_char);
+	void file_tree_key_callback(int glfw_key_code, int scancode, input::Action action, int modifiers);
+	void file_tree_char_callback(uint32_t utf32_char);
 
-	void key_callback(int glfw_key_code, int scancode, Input::Action action, int modifiers);
 	Window* m_window;
 	graphics::Renderer* m_renderer;
-	glm::vec2 m_last_window_framebuffer_size;
 	View m_current_view;
+	Mode m_current_mode;
+	glm::vec2 m_last_window_framebuffer_size;
 	FileTree *m_file_tree;
 	std::vector<std::vector<TextEditor*>> m_text_editors;
 	glm::ivec2 m_current_text_editor_index;
+
 };
 
 #endif

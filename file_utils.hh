@@ -34,6 +34,7 @@ File GetFileTree(const std::string& path);
 
 void ChangeTabsToSpaces(std::vector<std::string>& content, int spaces_in_tab);
 
+std::string GetFileNameFromPath(const std::string& path);
 
 }
 

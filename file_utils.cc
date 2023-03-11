@@ -75,6 +75,15 @@ void ChangeTabsToSpaces(std::vector<std::string>& content, int spaces_in_tab) {
 	}
 }
 
+std::string GetFileNameFromPath(const std::string& path) {
+	int i = path.size() - 1;
+	if (path[i] == '\\' || path[i] == '/')
+		i--;
+	while (i >= 0 && path[i] != '\\' && path[i] != '/')
+		i--;
+	return path.substr(i+1);
+}
+
 
 
 

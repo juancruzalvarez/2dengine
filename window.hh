@@ -21,25 +21,25 @@ public:
 
 
 	Window(std::string title, int width, int height, bool fullscreen = false);
-	void set_key_callback(Input::KeyCallbackFn callback);
-	void set_char_callback(Input::CharCallbackFn callback);
-	void set_screen_mode(ScreenMode screen_mode);
-	void set_visible(bool visible);
-	glm::vec2 framebuffer_size();
-	void make_context_current();
-	glm::vec2 window_size();
-	bool should_close();
-	bool has_resized();
-	void update();
+	void SetCharCallback(input::CharCallbackFn callback);
+	void SetKeyCallback(input::KeyCallbackFn callback);
+	void SetScreenMode(ScreenMode screen_mode);
+	void MakeContextCurrent();
+	void SetVisible(bool visible);
+	glm::vec2 FramebufferSize();
+	glm::vec2 WindowSize();
+	bool ShouldClose();
+	bool HasResized();
+	void Update();
 
 private:
-	GLFWwindow *window_handle_;
-	ScreenMode screen_mode_;
-	bool has_resized_;
-	glm::vec2 framebuffer_size_;
-	glm::vec2 window_size_;
-	Input::KeyCallbackFn key_callback_;
-	Input::CharCallbackFn char_callback_;
+	GLFWwindow *m_window_handle;
+	ScreenMode m_screen_mode;
+	glm::vec2 m_framebuffer_size;
+	glm::vec2 m_window_size;
+	bool m_has_resized;
+	input::CharCallbackFn m_char_callback;
+	input::KeyCallbackFn m_key_callback;
 
 };
 

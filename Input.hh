@@ -1,7 +1,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-namespace Input {
+namespace input {
 
 	enum class Action {
 		kPressed,

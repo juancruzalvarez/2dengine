@@ -8,6 +8,12 @@ TextEditor::TextEditor() {
 	m_cursor_pos = glm::vec2{ 0,0 };
 }
 
+TextEditor::TextEditor(const std::string& title, int line_height): m_title(title), m_line_height(line_height) {
+	m_lines = { "" };
+	m_cursor_pos = glm::vec2{ 0,0 };
+};
+
+
 void TextEditor::Write(uint8_t c) {
 	if (c == '\n') {
 		NewLine();
@@ -64,6 +70,8 @@ void TextEditor::Tab() {
 
 void TextEditor::SetContent(std::vector<std::string> content) {
 	m_lines = content;
+	m_cursor_pos = { 0,0 };
+	m_first_line = 0;
 }
 
 
@@ -151,15 +159,16 @@ glm::vec2 TextEditor::Size() {
 
 void TextEditor::Render(graphics::Renderer* renderer) {
 	
+	auto box_color = m_active ? glm::vec4(1,1,1,1) : glm::vec4(0.5,0.5,0.5,1);
 	//Render box:
 	auto title_width = renderer->GetTextSize(m_title, m_line_height*0.9).x;
 	auto title_sidebar_width = (m_size.x - title_width - 4 * m_box_size) /2.f;
-	renderer->RenderWhiteQuad({m_position, {m_box_size, m_size.y },{}, {1,1,1,1}});
-	renderer->RenderWhiteQuad({ m_position +glm::vec2{m_size.x-m_box_size,0.f}, {m_box_size, m_size.y},{}, {1,1,1,1}});
-	renderer->RenderWhiteQuad({ m_position, {m_size.x, m_box_size},{}, {1,1,1,1} });
-	renderer->RenderWhiteQuad({ m_position + glm::vec2{0.f,m_size.y},{title_sidebar_width, m_box_size},{},{1,1,1,1} });
-	renderer->RenderWhiteQuad({ m_position + glm::vec2{title_sidebar_width+4*m_box_size+ title_width,m_size.y},{title_sidebar_width, m_box_size},{},{1,1,1,1} });
-	renderer->RenderText(m_title, { m_position + glm::vec2{ title_sidebar_width + 2*m_box_size ,m_size.y - m_line_height / 2.f } }, m_line_height * 0.9, { 1,1,1,1 });
+	renderer->RenderWhiteQuad({m_position, {m_box_size, m_size.y },{}, box_color });
+	renderer->RenderWhiteQuad({ m_position +glm::vec2{m_size.x-m_box_size,0.f}, {m_box_size, m_size.y},{}, box_color });
+	renderer->RenderWhiteQuad({ m_position, {m_size.x, m_box_size},{}, box_color });
+	renderer->RenderWhiteQuad({ m_position + glm::vec2{0.f,m_size.y},{title_sidebar_width, m_box_size},{},box_color });
+	renderer->RenderWhiteQuad({ m_position + glm::vec2{title_sidebar_width+4*m_box_size+ title_width,m_size.y},{title_sidebar_width, m_box_size},{}, box_color });
+	renderer->RenderText(m_title, { m_position + glm::vec2{ title_sidebar_width + 2*m_box_size ,m_size.y - m_line_height / 2.f } }, m_line_height * 0.9, box_color);
 	auto lines_position = m_position;
 	auto lines_size = m_size;
 	lines_size.y -= m_box_size;
@@ -170,28 +179,37 @@ void TextEditor::Render(graphics::Renderer* renderer) {
 	//Render line numbering:
 	auto line_numbering_text_width = renderer->GetTextSize(std::to_string(m_lines.size()-1), m_line_height).x;
 	renderer->RenderWhiteQuad({ 
-		m_position + glm::vec2{ line_numbering_text_width +  m_box_size, 0.f},
+		m_position + glm::vec2{ line_numbering_text_width +  m_box_size*2.5f, 0.f},
 		{m_box_size*0.3f, m_size.y},
-		{},{1,1,1,1} 
+		{},box_color
 		});
 	int lines_to_render = lines_size.y / m_line_height;
 	auto line_number_pos = m_position;
 	line_number_pos.y += m_size.y-1.5*m_line_height;
-	line_number_pos.x += m_box_size;
+	line_number_pos.x += m_box_size*1.5f;
 	for (int i = m_first_line; i < std::min((int)m_lines.size(), m_first_line+lines_to_render); i++) {
-		renderer->RenderText(std::to_string(i), line_number_pos, m_line_height, {1,1,1,1});
+		auto curr_number_text_width = renderer->GetTextSize(std::to_string(i), m_line_height).x;
+		renderer->RenderText(
+			std::to_string(i),
+			line_number_pos+glm::vec2{line_numbering_text_width-curr_number_text_width,0},
+			m_line_height,
+			i == m_cursor_pos.y ? box_color : box_color*0.7f);
 		line_number_pos.y -= m_line_height;
 	}
-	lines_position.x += m_box_size*1.3f + line_numbering_text_width;
+	lines_position.x += m_box_size*2.f + line_numbering_text_width;
 
 	//Render lines
 	render_lines(renderer, lines_position, lines_size);
 
 	//Highlight current line
 	auto current_line_y = lines_position.y + lines_size.y - m_line_height - (m_cursor_pos.y - m_first_line) * m_line_height;
-	renderer->RenderWhiteQuad({ glm::vec2{lines_position.x-m_box_size, current_line_y}, {m_size.x - lines_position.x + m_position.x ,m_box_size * 0.3f, },{},{1,1,1,1}});
-	renderer->RenderWhiteQuad({ glm::vec2{lines_position.x - m_box_size, current_line_y+m_line_height}, {m_size.x - lines_position.x + m_position.x,m_box_size * 0.3f, },{},{1,1,1,1} });
+	renderer->RenderWhiteQuad({ glm::vec2{lines_position.x-m_box_size, current_line_y}, {m_size.x - lines_position.x + m_position.x ,m_box_size * 0.3f, },{},box_color });
+	renderer->RenderWhiteQuad({ glm::vec2{lines_position.x - m_box_size, current_line_y+m_line_height}, {m_size.x - lines_position.x + m_position.x,m_box_size * 0.3f, },{},box_color });
 
+}
+
+void TextEditor::SetActive(bool active) {
+	m_active = active;
 }
 
 void TextEditor::render_lines(graphics::Renderer* renderer, glm::vec2 position, glm::vec2 size) {

@@ -19,8 +19,8 @@ enum class Direction {
 	RIGHT,
 	LEFT,
 };
-
 TextEditor();
+TextEditor(const std::string& title, int line_height);
 void Render(graphics::Renderer *renderer);
 
 void Write(uint8_t c);
@@ -33,6 +33,7 @@ void MoveCursor(Direction dir);
 void SetTitle(std::string title);
 void SetSize(glm::vec2 size);
 void SetPosition(glm::vec2 position);
+void SetActive(bool active);
 glm::vec2 Position();
 glm::vec2 Size();
 
@@ -46,6 +47,7 @@ private:
 std::string m_title;
 glm::vec2 m_position;
 glm::vec2 m_size;
+bool m_active;
 
 int m_line_height;
 int m_box_size = 4;
